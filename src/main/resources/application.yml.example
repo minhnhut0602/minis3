@@ -1,0 +1,50 @@
+# APPLICATION CONFIGURATION
+
+# SPRING
+spring:
+      devtools:
+        livereload:
+          enabled: false
+      dataSource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/minis3
+        username: yourUserName
+        password: yourPassword
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+      http:
+        multipart:
+          enabled: false
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        username: yourUserName
+        password: yourPassword
+        properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
+
+# SECURITY
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+
+# JWT
+jwt:
+  sign:
+    key: 0xb613679a0814d9ec772f95d778c35fc5ff1697c493715653c6c712144292c5ad //change to your secret key
+
+
+# FILE SYSTEM
+filesystem:
+  storage:
+    path:
+      absolute: false
+      root-dir: minis3
+

@@ -1,0 +1,14 @@
+Configuration:
+  status: warn
+  name: Log4j2Config
+  appenders:
+    Console:
+      name: STDOUT
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%5p} %style{%5tid}{cyan}   ---   [%t]  %style{%C{1.}}{cyan}  : %m%n"
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        ref: STDOUT
