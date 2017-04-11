@@ -1,5 +1,7 @@
 # miniS3
 
+[![Build Status](https://travis-ci.org/prafsoni/minis3.svg?branch=master)](https://travis-ci.org/prafsoni/minis3)
+
 This is a coding assignment for FINRA Full-stack Java Developer Position.
 And, I am calling it as miniS3 because it treats everything(files) as Object and store them on disk, 
 just like AWS S3. Nope! I am not claiming in anyway that this is S3 or even close to it, it just shares that notion of 
