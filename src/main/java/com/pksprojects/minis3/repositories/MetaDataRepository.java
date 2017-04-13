@@ -1,6 +1,7 @@
 package com.pksprojects.minis3.repositories;
 
 import com.pksprojects.minis3.models.metadata.MetaData;
+import com.pksprojects.minis3.models.user.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +19,10 @@ import java.util.List;
 @Repository
 public interface MetaDataRepository extends JpaRepository<MetaData, String>{
 
-    public List<MetaData> findAllByUserIdOrderByTimeCreatedDesc(String userId, Pageable pageable);
+    public List<MetaData> findAllByUserOrderByTimeCreatedDesc(User user, Pageable pageable);
 
     public List<OnlyNameAndUserId> findAllByTimeCreatedBetweenOrderByUserAsc(LocalDateTime start, LocalDateTime end);
+
+    public MetaData findOneByUserAndName(User user, String name);
 
 }

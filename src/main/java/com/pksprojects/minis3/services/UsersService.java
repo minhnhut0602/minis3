@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Provides User tasks related service
  * Created by PKS on 4/8/17.
  */
 @Service
@@ -40,6 +41,12 @@ public class UsersService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Method used for authenticating user
+     * @param username of user trying to log in
+     * @return UserDetails if user with username exists
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userFromDatabase =  Optional.ofNullable(usersRepository.findUserByUsername(username));
@@ -51,6 +58,11 @@ public class UsersService implements UserDetailsService {
         }).orElseThrow(() -> new UsernameNotFoundException("User " + username + " was not found in the database"));
     }
 
+    /**
+     * Performs user registration
+     * @param registrationView of user to be registered
+     * @return true if success else false
+     */
     public boolean registerUser(UserRegistrationView registrationView){
         if(!isAvailable(registrationView.getUsername()) || !isEmailAlreadyInUser(registrationView.getEmail()))
             return false;
@@ -66,26 +78,36 @@ public class UsersService implements UserDetailsService {
         }
     }
 
+    /**
+     * checks if the username is available
+     * @param username to be checked
+     * @return true is available else false
+     */
     public boolean isAvailable(String username){
         return usersRepository.findUserByUsername(username) == null;
     }
 
+    /**
+     * Checks if the email address is already used with another account
+     * @param email to be checked
+     * @return true is email not used else false
+     */
     private boolean isEmailAlreadyInUser(String email) {
         return usersRepository.findUserByEmail(email) == null;
     }
 
-    public String getCurrentUsername() {
-        return getUsername();
-    }
-
-    public String getCurrentUserId() {
-        return getUserId();
-    }
-
+    /**
+     * Gets current logged In user.
+     * @return User
+     */
     public User getCurrentUser() {
         return getUser();
     }
 
+    /**
+     * Gets username of current authenticated user
+     * @return String username
+     */
     private String getUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -94,10 +116,10 @@ public class UsersService implements UserDetailsService {
         return null;
     }
 
-    private String getUserId(){
-        return getUser().getId();
-    }
-
+    /**
+     * Get currently authenticated user from database.
+     * @return User current user
+     */
     private User getUser() {
         return usersRepository.findUserByUsername(getUsername());
     }

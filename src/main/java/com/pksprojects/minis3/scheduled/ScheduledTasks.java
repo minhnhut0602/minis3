@@ -17,6 +17,7 @@ import static com.pksprojects.minis3.models.email.EmailSubjects.HOURLY_UPDATES;
 import static com.pksprojects.minis3.models.email.SystemEmailAddrs.HOURLY_NOTIFICATION;
 
 /**
+ * Component responsible for running scheduled tasks
  * Created by PKS on 4/10/17.
  */
 @Component
@@ -30,6 +31,9 @@ public class ScheduledTasks {
     @Autowired
     private FileMetaDataService fileMetaDataService;
 
+    /**
+     * Responsible for executing tasks involved in sending hourly email notifications.
+     */
     @Scheduled(fixedRate = 60 * 60 * 1000)
     public void sendHourlyEmail() {
         logger.info("Job ** Hourly Email Notification ** fired @ {}", LocalDateTime.now());

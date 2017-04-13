@@ -11,6 +11,7 @@ import java.io.IOException;
 
 
 /**
+ * Filter to add CORS headers.
  * Created by PKS on 4/8/17.
  */
 @Component

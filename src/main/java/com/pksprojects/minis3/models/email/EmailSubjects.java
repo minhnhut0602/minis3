@@ -1,6 +1,7 @@
 package com.pksprojects.minis3.models.email;
 
 /**
+ * Enum provides Email subjects template.
  * Created by PKS on 4/10/17.
  */
 public enum EmailSubjects {

@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 /**
+ * Simple Service providing basic API for sending emails.
  * Created by PKS on 4/10/17.
  */
 @Service
@@ -19,6 +20,13 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     * Sends email with the given parameters
+     * @param from address
+     * @param to address
+     * @param subject of email
+     * @param text email text
+     */
     public void sendEmail(String from, String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();

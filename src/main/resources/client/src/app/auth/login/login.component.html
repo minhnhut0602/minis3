@@ -1,0 +1,38 @@
+<section>
+  <div class="container">
+  <div class="alert alert-danger" role="alert" *ngIf="message">
+    {{ message }}
+  </div>
+  <h3>Login</h3>
+  <form class="form-horizontal" (ngSubmit)="login()" #loginForm="ngForm" *ngIf="!authService.isLoggedIn()">
+    <div class="row">
+      <div class="form-group col-lg-5">
+        <label class="col-sm-2 control-label" for="username">UserName:</label>
+        <div class="col-sm-10">
+          <input class="form-control" required [(ngModel)]="model.username" type="email" name="username" #username>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-5">
+        <label class="col-sm-2 control-label" for="password">Password:</label>
+        <div class="col-sm-10">
+          <input class="form-control" required [(ngModel)]="model.password" type="password" name="password" #password>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button [disabled]="!loginForm.form.valid" type="submit" class="btn btn-primary">Login</button>
+      </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="well" *ngIf="authService.isLoggedIn()">
+    Logged in as <b>{{ authService.isLoggedIn() }}</b>
+    <a href (click)="logout()">Log out</a>
+  </div>
+  </div>
+</section>

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
+ * Public representation of the MetaData.
  * Created by PKS on 4/9/17.
  */
 public class MetaDataView {

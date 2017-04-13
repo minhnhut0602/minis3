@@ -1,0 +1,58 @@
+<section>
+  <div class="container">
+  <div class="alert alert-danger" role="alert" *ngIf="message">
+    {{ message }}
+  </div>
+  <h3>SignUp!</h3>
+  <form class="form" (ngSubmit)="register()" #registerForm="ngForm" *ngIf="!authService.isLoggedIn()">
+    <div class="row">
+     <div class="form-group col-lg-5">
+      <label class="col-sm-2 control-label" for="fname">FirstName:</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="fname" #fname [(ngModel)]="model.firstName" required>
+      </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group col-lg-5">
+      <label class="col-sm-2 control-label" for="lname">LastName:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="lname" #lname [(ngModel)]="model.lastName" required>
+      </div>
+    </div>
+    </div>
+    <div class="row">
+     <div class="form-group col-lg-5">
+      <label class="col-sm-2 control-label" for="email">Email:</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="email" name="email" #email [(ngModel)]="model.email" required>
+      </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group col-lg-5">
+      <label class="col-sm-2 control-label" for="username">UserName:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="username" #username [(ngModel)]="model.username" required>
+      </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group col-lg-5">
+      <label class="col-sm-2 control-label" for="password">Password:</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="password" name="password" #password [(ngModel)]="model.password" required>
+      </div>
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-lg-5">
+      <div class="col-sm-offset-2 col-sm-10">
+        <input [disabled]="!registerForm.form.valid" type="submit" value="Register" class="btn btn-primary">
+      </div>
+      </div>
+    </div>
+  </form>
+  </div>
+</section>

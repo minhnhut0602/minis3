@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
+ * Simple service to provide location/path where to store file and check if file can be stored.
  * Created by PKS on 4/9/17.
  */
 @Service
@@ -36,15 +37,29 @@ public class FileLocationService {
         logger.info("Available free space in disk is:" + freeSpace +"KB");
     }
 
+    /**
+     * Check if enough space is available to store file.
+     * @param filesize size of the file to be stored
+     * @return true is storable else false
+     */
     public boolean isFileStorable(long filesize) {
         refreshSpace();
         return filesize < getAvailableSpace();
     }
 
+    /**
+     * Checks and return available space.
+     * @return Long available space.
+     */
     public long getAvailableSpace() {
         return freeSpace - reservedSpace;
     }
 
+    /**
+     * Reserves space for file whose meta data is stored
+     * @param size of space to be reserved
+     * @return true if reserved successfully else false
+     */
     public boolean reserveSpace(long size) {
         if(isFileStorable(size)) {
             reservedSpace += size;
@@ -53,6 +68,11 @@ public class FileLocationService {
         return false;
     }
 
+    /**
+     * frees reserved space once file is uploaded successfully
+     * @param size of space to be freed
+     * @return true if success else false.
+     */
     public boolean freeReservedSpace(long size) {
         if(reservedSpace - size < 0)
             return false;
@@ -60,6 +80,9 @@ public class FileLocationService {
         return true;
     }
 
+    /**
+     * Checks and updates available free space variable
+     */
     private void refreshSpace() {
         try {
             freeSpace = FileSystemUtils.freeSpaceKb();
@@ -68,6 +91,12 @@ public class FileLocationService {
         }
     }
 
+    /**
+     * Generates path to stored file based on user's Id and metadata Id
+     * @param userId Id of the user uploading file
+     * @param metaDataId Id of metadata corresponding to file.
+     * @return String path to location for storing file.
+     */
     public String getPathToStoreFile(String userId, String metaDataId) {
         return Paths.get(baseDirectory.toString(), userId, metaDataId).toAbsolutePath().normalize().toString();
     }

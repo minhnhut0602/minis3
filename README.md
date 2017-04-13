@@ -11,6 +11,11 @@ So, what can you do with it!, you can upload file with metadata(default and cust
 while metadata is stored on persistence store and file on disk, you
 can upload file over 2GB of size download file as stream.
 
+### Usage Instructions:
+
+create application.yml and log4j2.yml based on the example files in the resources directory.
+run using `mvn install` and you are all set.
+
 ### Requirements for Assignment:
 
 Implement a RESTful API spring-boot application that provides the following APIs:

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
+ * Provides CRUD API for User class.
  * Created by PKS on 4/8/17.
  */
 @Repository

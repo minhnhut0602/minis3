@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
+ * Implements FileRepository interface.
  * Created by PKS on 4/9/17.
  */
 @Repository
@@ -26,6 +27,9 @@ class FileRepositoryImpl implements FileRepository {
     @Autowired
     private Path baseDirectory;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeFile(String filePath, InputStream in, boolean isLarge) throws IOException {
         OutputStream out = new FileOutputStream(filePath);
@@ -35,11 +39,17 @@ class FileRepositoryImpl implements FileRepository {
         out.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FileSystemResource readFileAsStream(String filePath) {
         return new FileSystemResource(filePath);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean createDirectory(String path) {
         Path fullpath = Paths.get(baseDirectory.toString(), path);
@@ -54,6 +64,9 @@ class FileRepositoryImpl implements FileRepository {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(String fullPath) {
         Path path = Paths.get(fullPath);

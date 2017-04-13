@@ -14,6 +14,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
+ * Controller provides API to register user and check username availability.
  * Created by PKS on 4/8/17.
  */
 @RestController
@@ -25,13 +26,27 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
+    /**
+     * Registers the user
+     * @param user: UserRegistrationView to be registered.
+     * @return Success or error messages accordingly.
+     */
     @RequestMapping(value = "/register", method = POST)
     @ResponseBody
-    public void register(@RequestBody @Valid UserRegistrationView user){
-        usersService.registerUser(user);
-        logger.info("User: " + user.getUsername() + " successfully registered");
+    public ResponseEntity<String> register(@RequestBody @Valid UserRegistrationView user){
+        boolean result = usersService.registerUser(user);
+        if (result) {
+            logger.info("User: " + user.getUsername() + " successfully registered");
+            return ResponseEntity.ok("Success");
+        }
+        return ResponseEntity.badRequest().body("Unable to register user: " + user.getUsername());
     }
 
+    /**
+     * Checks if the username is already taken.
+     * @param username to be checked.
+     * @return true if available else false
+     */
     @RequestMapping(value = "/isavailable/{username}", method = GET)
     @ResponseBody
     public ResponseEntity<Boolean> isAvailable(@PathVariable String username) {

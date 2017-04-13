@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
+ * Class is responsible for configuring data source and data directory for application.
  * Created by PKS on 4/8/17.
  */
 @Component
@@ -33,6 +34,10 @@ public class AppConfig {
     @Autowired
     private Environment env;
 
+    /**
+     * Method created DataSource Bean by reading settings in application.yml
+     * @return DataSource
+     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -50,6 +55,10 @@ public class AppConfig {
     @Value("${filesystem.storage.path.absolute: false}")
     private boolean isAbsolutePah;
 
+    /**
+     * Method creates Bean to hold Path to storage directory as specified in settings and created directory if doesn't exist already.
+     * @return Path to storage directory
+     */
     @Bean
     public Path baseDirectory() {
         Path path = null;
@@ -65,6 +74,10 @@ public class AppConfig {
         return path;
     }
 
+    /**
+     * Creates Bean for Apache ServletFileUpload.
+     * @return
+     */
     @Bean
     public ServletFileUpload servletFileUpload() {
         return new ServletFileUpload();

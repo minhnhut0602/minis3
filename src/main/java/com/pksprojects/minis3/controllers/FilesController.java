@@ -24,6 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
+ * Controller provides GET and POST request to upload and download file.
  * Created by PKS on 4/8/17.
  */
 @RestController
@@ -38,6 +39,11 @@ public class FilesController {
     @Autowired
     private ServletFileUpload servletFileUpload;
 
+    /**
+     * GET API to download single file as stream.
+     * @param Id of file to be downloaded
+     * @return File as stream.
+     */
     @RequestMapping(value = "/{Id}", method = GET)
     public ResponseEntity<FileSystemResource> get(@PathVariable String Id) {
         HttpHeaders headers = fileMetaDataService.getHeaders(Id);
@@ -45,6 +51,12 @@ public class FilesController {
         return new ResponseEntity<>(isr, headers, HttpStatus.OK);
     }
 
+    /**
+     * POST API to upload single file by metadata Id
+     * @param Id of metadata for the particular file.
+     * @param request
+     * @return Success if file is stored successfully or an appropriate error msg.
+     */
     @RequestMapping(value = "/{Id}", method = POST)
     public ResponseEntity<String> upload(@PathVariable String Id, HttpServletRequest request) {
         try {

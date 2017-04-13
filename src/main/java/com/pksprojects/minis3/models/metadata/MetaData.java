@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Class Representing MetaData stored in database.
  * Created by PKS on 4/8/17.
  */
 @Entity
@@ -40,8 +41,6 @@ public class MetaData {
     private String contentLanguage;
     @NotNull
     private String contentType;
-//    @OneToOne(cascade= CascadeType.ALL)
-//    @MapKey(name = "name")
     @ElementCollection
     private Map<String, String> customMetaData;
     @ManyToOne

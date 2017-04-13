@@ -6,6 +6,7 @@ import com.pksprojects.minis3.models.user.User;
 import java.util.List;
 
 /**
+ * Public representation of User.
  * Created by PKS on 4/9/17.
  */
 public class UserView {

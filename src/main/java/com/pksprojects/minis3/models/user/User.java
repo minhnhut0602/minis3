@@ -17,6 +17,7 @@ import static com.pksprojects.minis3.models.user.Role.USER;
 import static java.util.Arrays.asList;
 
 /**
+ * Class representing User information sotred.
  * Created by PKS on 4/8/17.
  */
 @Entity

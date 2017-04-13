@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Provies Service API's for both file and metadata
  * Created by PKS on 4/8/17.
  */
 @Service
@@ -46,20 +47,33 @@ public class FileMetaDataService {
     @Autowired
     private UsersService usersService;
 
+    /**
+     * Generates metadata from metadataview and stores in the database if file is storable.
+     * @param view MetaDataView for uploaded metadata
+     * @return
+     */
     public String save(MetaDataView view) {
         if(locationService.isFileStorable(view.getSize())) {
             if(locationService.reserveSpace(view.getSize())) {
                 User user = usersService.getCurrentUser();
                 MetaData metaData = new MetaData(view, user);
-                String fullPath = locationService.getPathToStoreFile(user.getId(), metaData.getId());
-                metaData.setFullPath(fullPath);
-                MetaData saved = metaDataRepository.saveAndFlush(metaData);
-                if(saved!=null) return saved.getId();
+                if(metaDataRepository.findOneByUserAndName(user, metaData.getName()) == null) {
+                    String fullPath = locationService.getPathToStoreFile(user.getId(), metaData.getId());
+                    metaData.setFullPath(fullPath);
+                    MetaData saved = metaDataRepository.saveAndFlush(metaData);
+                    if (saved != null) return saved.getId();
+                }
             }
         }
         return null;
     }
 
+    /**
+     * Updates existing metadata, Accepts MetadataView and generates updated MetaData by merging view and old metadata.
+     * @param metaData MetaDataView consisting updated value.
+     * @return ture if success else false
+     * @throws NotFoundException if invalid MetadataView is passed.
+     */
     public boolean update(MetaDataView metaData) throws NotFoundException {
         MetaData old = metaDataRepository.findOne(metaData.getId());
         if(old == null)
@@ -68,19 +82,33 @@ public class FileMetaDataService {
         return metaDataRepository.saveAndFlush(updated) != null;
     }
 
+    /**
+     * Gets metadata corresponding to Id
+     * @param Id of metadta
+     * @return metadata
+     */
     public MetaData get(String Id) {
         return metaDataRepository.getOne(Id);
     }
 
-    public List<MetaData> get(String userId, int offSet, int limit) {
-        return metaDataRepository.findAllByUserIdOrderByTimeCreatedDesc(userId, new PageRequest(offSet, limit));
+    public List<MetaData> get(User user, int offSet, int limit) {
+        return metaDataRepository.findAllByUserOrderByTimeCreatedDesc(user, new PageRequest(offSet, limit));
     }
 
+    /**
+     * Delete's metadata given Id.
+     * @param Id of metadata
+     */
     public void delete(String Id) {
         metaDataRepository.delete(Id);
         fileRepository.delete(Id);
     }
 
+    /**
+     * Generated Http Headers to send while downloading file.
+     * @param metaId corresponding to file requested.
+     * @return HttpHeaders.
+     */
     public HttpHeaders getHeaders(String metaId) {
         MetaData metaData = get(metaId);
         HttpHeaders headers = new HttpHeaders();
@@ -99,6 +127,10 @@ public class FileMetaDataService {
         return headers;
     }
 
+    /**
+     * Gets All the files uploaded on past hour and maps them to users
+     * @return MapList<String, List<String>> mapping user email to file names
+     */
     public Map<String, List<String>> getAllNewIdsAndUserEmailForNotification() {
         List<OnlyNameAndUserId> results = metaDataRepository.
                 findAllByTimeCreatedBetweenOrderByUserAsc(LocalDateTime.now().minusHours(1),
@@ -115,6 +147,13 @@ public class FileMetaDataService {
         return userIdToFileNameMap;
     }
 
+    /**
+     * saves file to disk given parameters
+     * @param metaId corresponding to files.
+     * @param itemIterator FileItemIterator processed from request
+     * @throws IOException
+     * @throws FileUploadException
+     */
     public void saveFile(String metaId, FileItemIterator itemIterator) throws IOException, FileUploadException {
         MetaData metaData = get(metaId);
         String filePath = metaData.getFullPath();
@@ -128,11 +167,22 @@ public class FileMetaDataService {
         }
     }
 
+    /**
+     * Reads file ad FileSystemResource
+     * @param Id of file to be read
+     * @return FileSystemResource i.e. file as stream
+     */
     public FileSystemResource getFile(String Id) {
         String filePath = get(Id).getFullPath();
         return fileRepository.readFileAsStream(filePath);
     }
 
+    /**
+     * Merges the Old MetaData and New MetaDataView objects to get updated object.
+     * @param o Old Metadata
+     * @param n new MetaDataview
+     * @return
+     */
     private MetaData getUpdated(MetaData o, MetaDataView n) {
         o.setName(n.getName());
         o.setCacheControl(n.getCacheControl());
@@ -145,6 +195,11 @@ public class FileMetaDataService {
         return o;
     }
 
+    /**
+     * Checks if file is greated than 2 GB
+     * @param size of file to be checked
+     * @return ture if file  > 2GB else false
+     */
     private boolean isLarge(long size) {
         return size > 2 * 1024 * 1024;
     }
